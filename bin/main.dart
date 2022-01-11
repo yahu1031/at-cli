@@ -10,7 +10,7 @@ Future<void> main(List<String> args) async {
   ArgResults result = parser.parse(args);
   args = result.arguments;
   Directory keysDir = Directory(
-      path.join(Platform.script.path.split('/atsign-helper.exe')[0], 'Keys'));
+      path.join(Platform.script.path.split('atsign-helper.exe')[0].replaceFirst('/', ''), 'Keys'));
   if (!keysDir.existsSync()) {
     keysDir.createSync(recursive: true);
   }
