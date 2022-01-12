@@ -3,16 +3,6 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 class Copy {
-  /// Get the contents from the clipboard.
-  // static String getContents() {
-  //   var dl = _loadLib();
-
-  //   Pointer<Utf8> Function() _getContents = dl
-  //       .lookup<NativeFunction<Pointer<Utf8> Function()>>('get_contents')
-  //       .asFunction();
-
-  //   return _getContents().toDartString();
-  // }
 
   /// Set the contents of the clipboard.
   static void setContent(String contents) {
