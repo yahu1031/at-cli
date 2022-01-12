@@ -9,15 +9,21 @@ Future<void> main(List<String> args) async {
   ArgParser parser = ArgParser();
   ArgResults result = parser.parse(args);
   args = result.arguments;
+  String? keysDirPath;
+  Platform.script.path.endsWith('.exe')
+      ? keysDirPath =
+          path.join(Platform.script.path.split('atsign-helper.exe')[0], 'Keys')
+      : keysDirPath = path.join(Platform.script.path.split('bin/')[0], 'Keys');
   Directory keysDir = Directory(
-      path.join(Platform.script.path.split('atsign-helper.exe')[0].replaceFirst('/', ''), 'Keys'));
+      Platform.isWindows ? keysDirPath.replaceFirst('/', '') : keysDirPath);
   if (!keysDir.existsSync()) {
     keysDir.createSync(recursive: true);
   }
   if (args.isEmpty) {
-    EncryptionUtil.getPkam(keysDir.path);
+    await EncryptionUtil.getPkam(keysDir.path);
+    exit(0);
   }
-  if (args.length < 2) {
+  if (args.length < 2 && args.isNotEmpty) {
     stderr.writeln('No such argument found.\n');
     stdout.writeln('Usage: atsign-helper.exe <args>');
     stdout.writeln('Arguments:');

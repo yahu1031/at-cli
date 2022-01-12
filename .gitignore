@@ -9,3 +9,4 @@ build/
 *.lock
 *.exe
 *.zip
+.DS_Store

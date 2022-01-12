@@ -28,7 +28,11 @@ class Copy {
 
   // Load the lib files to support the clipboard functionality
   static DynamicLibrary _loadLib() {
-    var libPath = Platform.script.path.replaceAll(RegExp(r'[^/]+$'), '');
+    var libPath = Platform.script.path.endsWith('.exe')
+        ? Platform.script.path.split('atsign-helper.exe')[0]
+        : Platform.script.path
+            .split('bin/')[0]
+            .replaceAll(RegExp(r'[^/]+$'), '');
     String extension = Platform.isWindows
         ? 'dll'
         : Platform.isMacOS

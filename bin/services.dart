@@ -22,6 +22,7 @@ class EncryptionUtil {
     File cramFile = File(cramSecretFile);
     if (!cramFile.existsSync()) {
       stderr.write('Cram file not found: $cramSecretFile');
+      await Future.delayed(Duration(seconds: 5));
       exit(-1);
     }
     String cramContent = await cramFile.readAsString();
@@ -36,9 +37,9 @@ class EncryptionUtil {
     var bytes = utf8.encode(combo);
     var digest = sha512.convert(bytes);
     stdout.writeln(
-        'PKAM challange result was copied to your clipboard. Just paste it in the terminal.');
+        'CRAM challange result was copied to your clipboard. Just paste it in the terminal.');
     Copy.setContent('cram:$digest');
-    exit(0);
+    await Future.delayed(Duration(seconds: 5));
   }
 
   static Future<void> getPkam(String keysDir) async {
@@ -71,24 +72,16 @@ class EncryptionUtil {
         EncryptionUtil.decryptValue(aesPkamPrivateKey, selfEncryptionKey);
     if (atSign.startsWith('@')) {
       File pkamFile = File(path.join(keysDir, atSign));
-      if (await pkamFile.exists()) {
-        stdout.writeln(
-            '$atSign file already exists in $keysDir. Do you want to overwrite it?(y/n)');
-        String? option = stdin.readLineSync();
-        if (option == null || option.toLowerCase() != 'y') {
-          stdout.writeln('\n\n');
-          stdout.writeln(pkamKey);
-          exit(0);
-        } else {
-          await pkamFile.writeAsString(pkamKey);
-          stdout
-              .writeln('\nYour file has been saved as $atSign in Keys folder');
-          exit(0);
-        }
-      }
+      await pkamFile.writeAsString(pkamKey);
+      stdout.writeln('\nYour file has been saved as $atSign in Keys folder');
+      await Future.delayed(Duration(seconds: 5), () {
+        exit(0);
+      });
     } else {
       stdout.writeln(pkamKey);
-      exit(0);
+      await Future.delayed(Duration(seconds: 5), () {
+        exit(0);
+      });
     }
   }
 
@@ -97,15 +90,17 @@ class EncryptionUtil {
     File pkamFile = File(pkamSecretFile);
     if (!pkamFile.existsSync()) {
       stderr.write('Pkam file not found: $pkamFile');
+      await Future.delayed(Duration(seconds: 5));
       exit(-1);
     }
-    String cramContent = await pkamFile.readAsString();
-    cramContent = cramContent.trim();
-    RSAPrivateKey key = RSAPrivateKey.fromString(cramContent);
+    String pkamContent = await pkamFile.readAsString();
+    pkamContent = pkamContent.trim();
+    RSAPrivateKey key = RSAPrivateKey.fromString(pkamContent);
     stdout.writeln('Please provide challenge');
     String? challenge = stdin.readLineSync();
     if (challenge == null) {
       stderr.write('\nPlease enter a valid challenge');
+      await Future.delayed(Duration(seconds: 5));
       exit(-1);
     }
     if (challenge.contains('data')) {
@@ -119,10 +114,10 @@ class EncryptionUtil {
     var shaSignature = key.createSHA256Signature(bytes as Uint8List);
     var signature = base64.encode(shaSignature);
     stdout.writeln(
-        'CRAM challange result was copied to your clipboard. Just paste it in the terminal.');
-    Copy.setContent('cram:$signature');
+        'PKAM challange result was copied to your clipboard. Just paste it in the terminal.');
+    Copy.setContent('pkam:$signature');
 
     stdout.write('\n');
-    exit(0);
+    await Future.delayed(Duration(seconds: 5));
   }
 }
