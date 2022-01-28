@@ -1,16 +1,15 @@
 name: key_decryptor
-description: A sample command-line application.
-version: 1.0.0
-# homepage: https://www.example.com
+description: A simple atsign developers helper.
+version: 2.0.0
 environment:
   sdk: '>=2.15.1 <3.0.0'
 
-# dependencies:
-#   path: ^1.8.0
-dev_dependencies:
-  lints: ^1.0.0
-  test: ^1.16.0
 dependencies:
+  at_server_status: ^1.0.3
   crypton: ^2.0.3
   encrypt: ^5.0.1
   ffi: ^1.1.2
+  interact: ^2.1.1
+
+dev_dependencies:
+  lints: ^1.0.0

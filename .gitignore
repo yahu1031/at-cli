@@ -10,3 +10,4 @@ build/
 *.exe
 *.zip
 .DS_Store
+atsign-helper*
