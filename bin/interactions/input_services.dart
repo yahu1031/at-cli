@@ -51,7 +51,8 @@ class Inputs {
     String pkamFilePath = path.join(keysPath, keyFileName);
     pkamFilePath = Selectors.fileAlreadyExists(pkamFilePath);
     File(pkamFilePath).writeAsStringSync(pkamKey);
-    stdout.writeln('Your file has been saved as $atSign in $pkamFilePath');
+    stdout.writeln(
+        'Your file has been saved as ${pkamFilePath.split('/').last} in $pkamFilePath');
     sleep(const Duration(seconds: 3));
     exit(0);
   }
