@@ -1,6 +1,7 @@
 # Key Decryptor #
 
 A simple project that helps in 
-
-- getting PKAM key from the user atsign.atKeys.
-- solving the pkam and cram auth challenges.
+- Getting PKAM secret key from atKeys.
+- Solving the PKAM digest challenges.
+- Solving the CRAM digest challenges.
+- Finding atsigns secondary server location.
