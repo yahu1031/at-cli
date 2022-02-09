@@ -52,8 +52,8 @@ class Inputs {
     pkamFilePath = Selectors.fileAlreadyExists(pkamFilePath);
     File(pkamFilePath).writeAsStringSync(pkamKey);
     stdout.writeln(
-        'Your file has been saved as ${pkamFilePath.split('/').last} in $pkamFilePath');
-    sleep(const Duration(seconds: 3));
+        'Your file has been saved as ${pkamFilePath.split(Platform.pathSeparator).last} in $pkamFilePath');
+    sleep(const Duration(milliseconds: 1500));
     exit(0);
   }
 
@@ -112,7 +112,7 @@ class Inputs {
     stdout.writeln('PKAM challange result was copied to your clipboard. ' +
         'Just paste it in the terminal.'.blink().green());
     Copy.setContent('pkam:$signature');
-    sleep(const Duration(seconds: 3));
+    sleep(const Duration(milliseconds: 1500));
     exit(0);
   }
 
@@ -156,7 +156,7 @@ class Inputs {
     stdout.writeln('CRAM challange result was copied to your clipboard. ' +
         'Just paste it in the terminal.'.blink().green());
     Copy.setContent('cram:$cramDigestContent');
-    sleep(const Duration(seconds: 3));
+    sleep(const Duration(milliseconds: 1500));
     exit(0);
   }
 
@@ -181,6 +181,30 @@ class Inputs {
     stdout.writeln(status.serverLocation == null
         ? 'Sorry. Could not find your @sign location'.yellow().bold()
         : 'Your @sign location is ${status.serverLocation?.green().bold().blink()}');
+    exit(0);
+  }
+
+  static Future<void> connectToSecondary() async {
+    stdout.write(
+        '${'?'.yellow().blink()} Please provide your secondary location : '
+            .bold());
+    String? secondaryLocation = stdin.readLineSync();
+    if (secondaryLocation == null || secondaryLocation.isEmpty) {
+      stderr.writeln('Looks like you forgot to enter your secondary location'
+          .red()
+          .bold());
+      exit(1);
+    }
+    await Process.start(
+      'openssl',
+      <String>[
+        's_client',
+        '-connect',
+        secondaryLocation,
+      ],
+      runInShell: true,
+      mode: ProcessStartMode.detachedWithStdio,
+    );
     exit(0);
   }
 }

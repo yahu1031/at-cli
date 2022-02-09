@@ -1,3 +1,10 @@
+## 1.0.0 - beta
+- Added connecting to a secondary server feature.
+- Fixed libclipboard folder issue.
+
+> Known issues: 
+> - Windows doesn't show any data while pasting digest challenge or secondary location.
+
 ## 2.0.0
 - Changed the code structure.
 - CLI support was added.

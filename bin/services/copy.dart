@@ -20,28 +20,26 @@ class Copy {
   /// Load the lib files to support the clipboard functionality
   static DynamicLibrary _loadLib() {
     late String libPath;
-    String scriptPath = Platform.script.path;
-    if (scriptPath.split('/').last.endsWith('.dart')) {
-      libPath = Platform.script.path.split('/bin/')[0];
-    } else if (scriptPath.split('/').last.contains('atsign-helper')) {
-      libPath = Platform.script.path.split('atsign-helper')[0];
+    List<String> scriptPathSegments = Platform.script.pathSegments;
+    if (scriptPathSegments.last.endsWith('.dart')) {
+      libPath = path.joinAll(
+          scriptPathSegments.sublist(0, scriptPathSegments.length - 2));
+    } else if (scriptPathSegments.last.contains('at-helper')) {
+      libPath = path.joinAll(
+          scriptPathSegments.sublist(0, scriptPathSegments.length - 1));
     }
-    libPath = Platform.isWindows
-        ? libPath.replaceFirst('/', '').replaceAll('/', '\\')
-        : libPath;
     String extension = Platform.isWindows
         ? 'dll'
         : Platform.isMacOS
             ? 'dylib'
             : 'so';
-    // if (Platform.isWindows) {
-    //   if (libPath[0] == '/') libPath = libPath.replaceFirst('/', '');
-    // }
-    libPath = path.join(libPath, 'lib', 'libclipboard.$extension');
-    if (File(libPath).existsSync()) {
-      return DynamicLibrary.open(libPath);
+
+    String libFilePath = path.join(libPath, 'lib', 'libclipboard.$extension');
+    if (File(libFilePath).existsSync()) {
+      return DynamicLibrary.open(libFilePath);
     } else {
-      throw FileSystemException('libclipboard.$extension not found: $libPath');
+      throw FileSystemException(
+          'libclipboard.$extension not found: $libFilePath');
     }
   }
 }

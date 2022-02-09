@@ -30,6 +30,7 @@ class Selectors {
         'pkam digest',
         'cram digest',
         'Get secondary location',
+        'Connect to a secondary (Under development)',
         'Exit'
       ],
     ).interact();
@@ -47,6 +48,9 @@ class Selectors {
         await Inputs.getSecondaryLocation();
         break;
       case 4:
+        await Inputs.connectToSecondary();
+        break;
+      case 5:
         exit(0);
     }
   }
